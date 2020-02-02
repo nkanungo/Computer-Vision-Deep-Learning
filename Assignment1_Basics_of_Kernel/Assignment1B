@@ -1,0 +1,85 @@
+This file contains the answer for the 2nd part of the Assignment-1 . This file contains the answer to the following questions.
+================================================================================================================================
+
+A.  What are Channels and Kernels (according to EVA)?
+----------------------------------------------------------
+Channels and Kernels are associated with Images in this scenario. Here I will try to explain this concept using an example. 
+Let's say we are seeing the image of India team winning the cricket world cup . In this image we can observe things like 
+1. The Trophy
+2. The Champions Board that the players and standing behind
+3. The Shampain
+4. The Players 
+5. The Chief Guests   etc.
+
+We can consider each of the above here as " channels "  as these are the significant entities of the image .
+
+Now let's say we want to process a part of the trophy where the names of the previous winners are written. Now we use some sort of filter in order to 
+extract that part. The filter which is used to extract that information from trophy is called the " kernel " 
+
+Now let's talk about the same image. The Image has many colors in it . Now let's say we want to predict many similar images to find out 
+which is the image with ICC trophy. In order to do that we need to extract important features from the images to identify . In this case
+the colors in the image can be considered as different channels . Now say we use convolution to find out different edges of the image . In order 
+to do that we apply filter of size which is less than the size of the original image , however many such filters in order to identify different 
+characteristics/features. in this case the filter that we apply is called Kernel .
+
+So if we summarize then we can say that channels are part of the original image which when applied by kernel of a fixed size generates multiple 
+channels of different size. every channel that is generated differs from others and which when combined gives a scaled version of the original
+image with the most important features being loud enough.
+
+Example 
+The Image may have size of say 128*128 with 4 channels (RGBA) . We may apply kernel of size 5*5 and 32 of them . Then the image will be transferred
+as 124*124*32 .
+We can take many combinations of channels and kernels to discuss further .
+
+
+B.  Why should we only (well mostly) use 3x3 Kernels?
+--------------------------------------------------------
+Let's understand this concept using an example .
+
+Here we will consider an image of size 11 * 11 (pixels) . How in order to process this image we would need 64 * 64 = 4096 number of neurons .
+However if we take kernels then the total number of neurons required will be less. This triggered the idea of using Kernels in Image 
+processing using CNN.
+Now why should we use mostly 3*3 kernels ? Here we should remember that our objective is to process all the features of the original image .
+The benefit will be achieved if we choose a kernel which is good enough to eventually give the receptive field equal to the original image
+Coming back to the example while processing the 11*11 image,each pixel of the 2nd layer has seen 3*3 pixels of the original image . similarly 
+the layer next to it has seen 3*3 pixels of the 2nd layer where as 3*3*3*3 of the first layer. Similarly if you go further down you will 
+understand that the receptive field increases and using 3*3 eventually and incrementally achieves the 5*5 , 7*7 ...... functionality till 
+we see the original image. Hence 3*3 can be used multiple times to achieve all the kernel sizes (odd) . Hence for ease of use and considering 
+the most granular layer for avoiding data loss 3*3 is used.Also it takes less number of computation to achieve the same result. For example
+say if we need to process a 7 * 7 image with a kernel size of 7 * 7 to get 1 *1 . Then we need 49 neurons/computations to achieve the same. now 
+if we take 3*3 kernels then we would need 3 of them, that means 3 * 3* 3 = 27 number of neurons. That means we would require 22 less neurons.
+Now when we talk about large size images this process of training will be much faster which can save time, money and complexity.
+
+
+C.  How many times do we need to perform 3x3 convolution operation to reach 1x1 from 199x199 (show calculations)
+
+Let us first find the generalized formula for this and then try to find out the solution of the above problem using the general formula.
+
+Let's say :  Original Image is of size n*m ( n & m can be same as well)
+             Kernel size choosen is : p*q ( p & q can be same as well) 
+             (Here for thsi example we will consider this as a single channel image )
+             
+             Now the new image will be of size (n-p+1) * (m-q+1) 
+             Now the next layer will have a size of ( n-2p+2) * (m-2q+2) 
+             
+ So to generalize if we take l as the number of layer then the size of the image any any given layer will be (n-lp+2) * (m-lq+2).
+ 
+ Now rewritting the equation we find 
+ N = n-lp+l and M = m-lq+l  (where N amd M are new domensions of the image)
+ 
+ So from above we find 
+ lp = n+l-N    ->  l = (n-N)/(p-1)
+ similarly 
+ lq = m+l-M    -> l = (m-M)/(q-1)
+ 
+ Now let's solve the above problem 
+ in this example 
+ n=m = 199
+ p=q = 3
+ N=M = 1
+ 
+ now l = (199-1)/(3-1) = 198/2 = 99
+ so it will take 99 times to reach 1x1 from 199x199
+ 
+ 
+ 
